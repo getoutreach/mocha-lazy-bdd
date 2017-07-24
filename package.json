@@ -2,14 +2,15 @@
   "name": "mocha-lazy-bdd",
   "version": "0.1.2",
   "description": "Lazy bdd interface for mocha that provides RSpec-style let/subject macros for ES5+ projects.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ghempton/mocha-lazy-bdd"
+    "url": "https://github.com/getoutreach/mocha-lazy-bdd"
   },
   "scripts": {
-    "test": "node ./run-tests.js",
-    "browser": "webpack index.js dist/mocha-lazy-bdd.js"
+    "build": "scripts/build",
+    "lint": "scripts/lint",
+    "test": "scripts/test"
   },
   "keywords": [
     "mocha",
@@ -19,20 +20,20 @@
     "let",
     "subject"
   ],
-  "author": {
-    "name": "Gordon L. Hempton",
-    "email": "ghempton@gmail.com"
-  },
+  "author": [
+    "Gordon L. Hempton <ghempton@gmail.com>",
+    "Devin Canterberry <devin.canterberry@outreach.io>"
+  ],
   "license": "ISC",
-  "peerDependencies": {
-    "mocha": ">=2.4.0"
+  "dependencies": {
+    "mocha": "3.4.2"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "mocha": ">=2.4.0",
-    "webpack": "^1.4.15"
-  },
-  "dependencies": {
-    "escape-string-regexp": "^1.0.3"
+    "babel-cli": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-preset-env": "1.6.0",
+    "babel-register": "6.24.1",
+    "chai": "4.1.0",
+    "eslint": "4.3.0"
   }
 }

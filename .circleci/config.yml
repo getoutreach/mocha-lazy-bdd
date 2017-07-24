@@ -1,0 +1,35 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/project
+    docker:
+    - image: getoutreach/outreach-circleci-node:2017.7.14.2
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+          - v1-{{ checksum ".nvmrc" }}-yarn-lock-{{ checksum "yarn.lock" }}
+          - v1-{{ checksum ".nvmrc" }}-npm-package-{{ checksum "package.json" }}
+    - run:
+        name: Installing dependencies
+        command: |
+          yarn install
+    - save_cache:
+        key: v1-{{ checksum ".nvmrc" }}-yarn-lock-{{ checksum "yarn.lock" }}
+        paths:
+          - "node_modules"
+    - save_cache:
+        key: v1-{{ checksum ".nvmrc" }}-npm-package-{{ checksum "package.json" }}
+        paths:
+          - "node_modules"
+    - run:
+        name: Transpiling source files
+        command: |
+          yarn build
+    - run:
+        name: Running tests
+        command: |
+          mkdir -p ~/test-results/testem
+          yarn test --silent -- --reporter xunit > ~/test-results/testem/xunit.xml
+    - store_test_results:
+        path: ~/test-results

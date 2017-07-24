@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR=$(cd "$(dirname "$0")"; pwd)
+
+"${SCRIPTS_DIR}/lint" || exit 1
+
+BASE_DIR=$(dirname "${SCRIPTS_DIR}")
+MOCHA=${BASE_DIR}/node_modules/.bin/mocha
+
+(cd "${BASE_DIR}"; "${MOCHA}" --recursive --require src/index.js --compilers js:babel-register -u lazy-bdd $*) || exit 1
