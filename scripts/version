@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+VERSION=$1
+
+if [ -z "${VERSION}" ]; then
+  echo "Please supply a version number like 0.1.0"
+  echo "No changes have been made. Exiting."
+  exit 1
+fi
+
+SCRIPTS_DIR=$(cd "$(dirname "$0")"; pwd)
+
+BASE_DIR=$(dirname "${SCRIPTS_DIR}")
+
+(
+  cd "${BASE_DIR}"
+  yarn install || exit 1
+  yarn test || exit 1
+  echo "Bumping version to v${VERSION}"
+  yarn version --new-version "${VERSION}" --no-git-tag-version || exit 1
+  git add package.json || exit 1
+  git commit -m "Version v${VERSION}" || exit 1
+  git checkout -b "${VERSION}" || exit 1
+  yarn build || exit 1
+  git add -fA lib || exit 1
+  git commit -m "Version v${VERSION}" || exit 1
+  git tag -a "v${VERSION}" -m "Version v${VERSION}" || exit 1
+) || exit 1
+
+echo "Successfully created version v${VERSION}"
+echo "You will need to manually push the tag and version upstream for this to take effect"
